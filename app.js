@@ -22,8 +22,23 @@ app.use(bodyParser.urlencoded({
 app.use(fileUpload());
 app.use(express.static(__dirname + "/public"));
 
+// Routes
+// app.use("/users", require("./routes/user.route"));
+
+
 app.get('/', function (req, res) {
-    res.send(200);
+    let dbState;
+    switch(db.readyState) {
+        case 0: dbState = "disconnected";
+            break;
+        case 1: dbState = "connected";
+            break;
+        case 2: dbState = "connecting";
+            break;
+        case 3: dbState = "disconnecting";
+            break;
+    }
+    res.send("Hello! Welcome to " + pjson.name + " v" + pjson.version + "<br>Datebase " + db.name + " " + dbState);
 });
 
 let port = process.env.PORT || 3000;
